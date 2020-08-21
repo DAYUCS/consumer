@@ -11,7 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -30,15 +30,15 @@ public class ConsumerApplication {
 	}
 
 	@PostMapping("/")
-	@ResponseBody
-	public String consume(String cloudEventJson) {
-		JSONObject response = new JSONObject(cloudEventJson).put("host", HOSTNAME).put("time", SDF.format(new Date()));
+	public String consume(@RequestBody String cloudEvent) {
+		JSONObject response = new JSONObject().put("cloudEvent", cloudEvent).put("host", HOSTNAME).put("time",
+				SDF.format(new Date()));
 		LOGGER.info("Event Message Received \n {}", response.toString());
 		return response.toString();
 	}
 
 	@GetMapping("/healthz")
-    public String health() {
-        return "OK";
-    }
+	public String health() {
+		return "OK";
+	}
 }
