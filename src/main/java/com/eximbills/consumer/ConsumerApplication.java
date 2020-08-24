@@ -30,8 +30,8 @@ public class ConsumerApplication {
 	}
 
 	@PostMapping("/")
-	public String consume(@RequestBody String cloudEvent) {
-		JSONObject response = new JSONObject().put("cloudEvent", cloudEvent).put("host", HOSTNAME).put("time",
+	public String consume(@RequestBody String cloudEventJson) {
+		JSONObject response = new JSONObject(cloudEventJson).put("receiver", HOSTNAME).put("receive-time",
 				SDF.format(new Date()));
 		LOGGER.info("Event Message Received \n {}", response.toString());
 		return response.toString();
