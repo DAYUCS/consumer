@@ -35,6 +35,8 @@ public class ConsumerApplication {
 	public ResponseEntity<Void> consume(@RequestHeader Map<String, Object> headers, @RequestBody String body) {
 		LOGGER.info("Received request header: " + headers);
 		LOGGER.info("Received request body: " + body);
+		// This doesn't make sense. Knative tranfer CloudEvent to HTTP Request. Here we transfer HTTP Request to
+		// CloudEvent again.
 		try {
 			Object contentTypeVal = headers.get("Content-Type");
 			if (contentTypeVal == null
@@ -47,7 +49,9 @@ public class ConsumerApplication {
 				LOGGER.info("ID: " + attributesImpl.getId());
 				LOGGER.info("Spec Version: " + attributesImpl.getSpecversion());
 				LOGGER.info("Subject: " + attributesImpl.getSubject());
-				LOGGER.info("Time" + attributesImpl.getTime());
+				LOGGER.info("Time: " + attributesImpl.getTime());
+				LOGGER.info("Source:" + attributesImpl.getSource());
+				LOGGER.info("Type: " + attributesImpl.getType());
 			}
 			return ResponseEntity.accepted().build();
 		} catch (Exception e) {
